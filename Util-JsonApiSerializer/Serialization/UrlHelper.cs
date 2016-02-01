@@ -38,12 +38,20 @@ namespace UtilJsonApiSerializer.Serialization
 
         public string GetFullyQualifiedUrl(string urlTemplate)
         {
-            if (String.IsNullOrEmpty(Url))
+            try
             {
-                if (urlTemplate.StartsWith("//"))
-                    return new Uri(RoutePrefix + urlTemplate.TrimStart('/')).ToString();
+                if (String.IsNullOrEmpty(Url))
+                {
+                    if (urlTemplate.StartsWith("//"))
+                        return new Uri(RoutePrefix + urlTemplate.TrimStart('/')).ToString();
 
-                return new Uri(RoutePrefix + urlTemplate).ToString();
+                    return new Uri(RoutePrefix + urlTemplate).ToString();
+                }
+            }
+            catch(Exception debugException)
+            {
+                int test = 1;
+                throw;
             }
 
             Uri fullyQualiffiedUrl;
