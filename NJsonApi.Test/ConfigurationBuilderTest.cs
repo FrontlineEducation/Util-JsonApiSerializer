@@ -229,7 +229,7 @@ namespace UtilJsonApiSerializer.Test
 
             builder.Resource<Author>();
             builder.Resource<Comment>();
-            
+
             var configuration = builder.Build();
             var postMapping = configuration.GetMapping(typeof(Post));
 
@@ -262,7 +262,9 @@ namespace UtilJsonApiSerializer.Test
             var postMapping = configuration.GetMapping(typeof(Post));
 
             //Assert
-            postMapping.Relationships.Count.Should().Be(0);
+            postMapping.Relationships.Count.Should().Be(2);
+            postMapping.Relationships.SingleOrDefault(l => l.RelatedBaseResourceType == "authors").Should().NotBeNull();
+            postMapping.Relationships.SingleOrDefault(l => l.RelatedBaseResourceType == "comments").Should().NotBeNull();
             postMapping.PropertyGetters.Count.Should().Be(2);
             postMapping.PropertySetters.Count.Should().Be(2);
             postMapping.IdGetter.Should().NotBeNull();
@@ -309,8 +311,7 @@ namespace UtilJsonApiSerializer.Test
             //Act
             builder
                 .Resource<Post>()
-                .WithAllProperties()
-                .WithAllLinkedResources();
+                .WithAllProperties();
 
             builder
                 .Resource<Author>()
