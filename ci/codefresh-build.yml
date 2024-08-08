@@ -1,6 +1,6 @@
 version: '1.0'
 mode: sequential
-stages: [ 'checkout', 'build', 'push', 'notify' ]
+stages: [ 'checkout', 'build', 'Scan', 'push', 'notify' ]
 
 steps:
   main_clone:
@@ -45,6 +45,23 @@ steps:
       - nugetVersion=${{TAG}}
       - branchName=${{CF_BRANCH}}
 
+  SnykScanningCode:
+    when: {steps: [{name: BuildingDockerImage, on: [success]}]}
+    title: Snyk Code Scan
+    stage: Scan
+    image: snyk/snyk-cli:python-3.6
+    commands:
+        - snyk auth ${SNYK_TOKEN} 
+        - snyk code test --org=${{ORGANIZATION_ID}} --json --severity-threshold=high || true
+
+  SonarScanning:
+    when: {steps: [{name: BuildingDockerImage, on: [success]}]}
+    title: Running Sonar Analysis
+    stage: Scan
+    image: sonarsource/sonar-scanner-cli:4.6
+    commands:
+        - "sonar-scanner -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=cf_${{CF_REPO_NAME}} -Dsonar.projectName=cf_${{CF_REPO_NAME}} -Dsonar.sources=./ -Dsonar.projectBaseDir=/codefresh/volume/${{CF_REPO_NAME}}/ -Dsonar.projectVersion=${TAG} -Dsonar.branch.name=${{CF_BRANCH}}"
+ 
   PushTag:
     when: {steps: [{name: BuildingDockerImage, on: [success]}]}
     title: Push Tag
