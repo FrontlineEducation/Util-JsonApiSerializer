@@ -1,9 +1,11 @@
 ﻿#if NETCOREAPP
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Console;
 #else
 #endif
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 
 namespace UtilJsonApiSerializer.Serialization
@@ -55,15 +57,25 @@ namespace UtilJsonApiSerializer.Serialization
                     var context = _accessor.HttpContext;
                     if (context != null)
                     {
+                        //if (routePrefix == string.Empty)
+                        //{
+                        //    //Uri url = new Uri(Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request));
+                        //    //var scheme = url.Scheme;
+                        //    //if (context.Request.Headers["X-Forwarded-Proto"].Any())
+                        //    //{
+                        //    //    scheme = context.Request.Headers["X-Forwarded-Proto"];
+                        //    //}
+                        //    //root = scheme + "://" + url.Authority + context.Request.PathBase;
+                        //}
                         if (routePrefix == string.Empty)
                         {
-                            Uri url =new Uri(Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request));
-                            var scheme = url.Scheme;
-                            if (context.Request.Headers["X-Forwarded-Proto"].Any())
+                            var request = context.Request;
+                            var scheme = request.Scheme;
+                            if (request.Headers["X-Forwarded-Proto"].Any())
                             {
-                                scheme = context.Request.Headers["X-Forwarded-Proto"];
+                                scheme = request.Headers["X-Forwarded-Proto"];
                             }
-                            root = scheme + "://" + url.Authority + context.Request.PathBase;
+                            root = scheme + "://" + request.Host + request.PathBase;
                         }
                     }
 
