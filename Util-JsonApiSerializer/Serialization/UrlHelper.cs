@@ -1,4 +1,5 @@
 ﻿#if NETCOREAPP
+using Common.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Console;
 #else
@@ -15,7 +16,7 @@ namespace UtilJsonApiSerializer.Serialization
         private string routePrefix = string.Empty;
         private string root = string.Empty;
 
-
+        private readonly ILog _logger = LogManager.GetLogger<JsonApiSerializer>();
         public UrlBuilder()
         {
         }
@@ -48,6 +49,7 @@ namespace UtilJsonApiSerializer.Serialization
         {
             get
             {
+                _logger.Info($"routePrefix : {routePrefix}");
                 if (!string.IsNullOrEmpty(routePrefix))
                 {
                     root = routePrefix;
@@ -57,26 +59,17 @@ namespace UtilJsonApiSerializer.Serialization
                     var context = _accessor.HttpContext;
                     if (context != null)
                     {
-                        //if (routePrefix == string.Empty)
-                        //{
-                        //    //Uri url = new Uri(Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request));
-                        //    //var scheme = url.Scheme;
-                        //    //if (context.Request.Headers["X-Forwarded-Proto"].Any())
-                        //    //{
-                        //    //    scheme = context.Request.Headers["X-Forwarded-Proto"];
-                        //    //}
-                        //    //root = scheme + "://" + url.Authority + context.Request.PathBase;
-                        //}
                         if (routePrefix == string.Empty)
                         {
-                            var request = context.Request;
-                            var scheme = request.Scheme;
-                            if (request.Headers["X-Forwarded-Proto"].Any())
+                            Uri url = new Uri(Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request));
+                            var scheme = url.Scheme;
+                            if (context.Request.Headers["X-Forwarded-Proto"].Any())
                             {
-                                scheme = request.Headers["X-Forwarded-Proto"];
+                                scheme = context.Request.Headers["X-Forwarded-Proto"];
                             }
-                            root = scheme + "://" + request.Host + request.PathBase;
+                            root = scheme + "://" + url.Authority + context.Request.PathBase;
                         }
+                        _logger.Info($"Url : {Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request)}");
                     }
 
                 }
@@ -119,6 +112,7 @@ namespace UtilJsonApiSerializer.Serialization
 #endif
         public string GetFullyQualifiedUrl(string urlTemplate)
         {
+            _logger.Info($"UrlTemplate in GetFullyQualifiedUrl method : {urlTemplate}");
             if (String.IsNullOrEmpty(Url))
             {
                 if (urlTemplate.StartsWith("//"))
@@ -140,6 +134,7 @@ namespace UtilJsonApiSerializer.Serialization
             if (!Uri.TryCreate(new Uri(Url), new Uri(RoutePrefix + urlTemplate, UriKind.Relative), out fullyQualiffiedUrl))
                 throw new ArgumentException(string.Format("Unable to create fully qualified url for urltemplate = '{0}'", urlTemplate));
 
+            _logger.Info($"fullyQualiffiedUrl in GetFullyQualifiedUrl method : {fullyQualiffiedUrl}");
             return fullyQualiffiedUrl.ToString();
         }
     }

@@ -94,6 +94,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pluralize.NET" Version="1.0.2" />
   </ItemGroup>
