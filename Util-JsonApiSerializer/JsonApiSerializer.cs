@@ -38,7 +38,7 @@ namespace UtilJsonApiSerializer
             var config = serializerConfig.Build();
             RunPreSerializationPipelineModules(config, obj);
 #if NETCOREAPP
-            _logger.Info($"Route Prefix : {Newtonsoft.Json.JsonConvert.SerializeObject(_accessor.HttpContext.Request)}");
+            //_logger.Info($"Route Prefix : {Newtonsoft.Json.JsonConvert.SerializeObject(_accessor.HttpContext.Request)}");
             var sut = new JsonApiTransformer() { TransformationHelper = new TransformationHelper(_accessor) };
 
 #else
