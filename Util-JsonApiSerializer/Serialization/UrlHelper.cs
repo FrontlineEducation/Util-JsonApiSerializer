@@ -129,6 +129,7 @@ namespace UtilJsonApiSerializer.Serialization
             if (Uri.TryCreate(urlTemplate, UriKind.Absolute, out fullyQualiffiedUrl))
             {
                 _logger.Error($"First Try Create method called  : {fullyQualiffiedUrl}");
+
                 return fullyQualiffiedUrl.ToString();
             }
 
