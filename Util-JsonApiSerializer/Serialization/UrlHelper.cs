@@ -118,7 +118,7 @@ namespace UtilJsonApiSerializer.Serialization
             Uri fullyQualiffiedUrl;
 
             //try to create an absolute URL from the urlTemplate
-            if (Uri.TryCreate(urlTemplate, UriKind.Absolute, out fullyQualiffiedUrl))
+            if (Uri.TryCreate(urlTemplate, UriKind.Absolute, out fullyQualiffiedUrl) && (fullyQualiffiedUrl.Scheme == Uri.UriSchemeHttp || fullyQualiffiedUrl.Scheme == Uri.UriSchemeHttps))
                 return fullyQualiffiedUrl.ToString();
 
             //try to create an absolute url from the routeprefix + urltemplate
