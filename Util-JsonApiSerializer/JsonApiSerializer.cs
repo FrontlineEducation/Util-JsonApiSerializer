@@ -23,7 +23,7 @@ namespace UtilJsonApiSerializer
             SerializerConfiguration = new ConfigurationBuilder();
             _routePrefix = routePrefix;
             _accessor = accessor;
-            _logger.Info($"Route Prefix : {routePrefix}");
+            _logger.Error($"Route Prefix : {routePrefix}");
         }
 #else
 

@@ -16,7 +16,7 @@ namespace UtilJsonApiSerializer.Serialization
         private string routePrefix = string.Empty;
         private string root = string.Empty;
 
-        private readonly ILog _logger = LogManager.GetLogger<JsonApiSerializer>();
+        private readonly ILog _logger = LogManager.GetLogger<UrlBuilder>();
         public UrlBuilder()
         {
         }
@@ -49,7 +49,7 @@ namespace UtilJsonApiSerializer.Serialization
         {
             get
             {
-                _logger.Info($"routePrefix : {routePrefix}");
+                _logger.Error($"routePrefix : {routePrefix}");
                 if (!string.IsNullOrEmpty(routePrefix))
                 {
                     root = routePrefix;
@@ -69,7 +69,7 @@ namespace UtilJsonApiSerializer.Serialization
                             }
                             root = scheme + "://" + url.Authority + context.Request.PathBase;
                         }
-                        _logger.Info($"Url : {Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request)}");
+                        _logger.Error($"Url : {Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(context.Request)}");
                     }
 
                 }
@@ -112,7 +112,7 @@ namespace UtilJsonApiSerializer.Serialization
 #endif
         public string GetFullyQualifiedUrl(string urlTemplate)
         {
-            _logger.Info($"UrlTemplate in GetFullyQualifiedUrl method : {urlTemplate}");
+            _logger.Error($"UrlTemplate in GetFullyQualifiedUrl method : {urlTemplate}");
             if (String.IsNullOrEmpty(Url))
             {
                 if (urlTemplate.StartsWith("//"))
@@ -134,7 +134,7 @@ namespace UtilJsonApiSerializer.Serialization
             if (!Uri.TryCreate(new Uri(Url), new Uri(RoutePrefix + urlTemplate, UriKind.Relative), out fullyQualiffiedUrl))
                 throw new ArgumentException(string.Format("Unable to create fully qualified url for urltemplate = '{0}'", urlTemplate));
 
-            _logger.Info($"fullyQualiffiedUrl in GetFullyQualifiedUrl method : {fullyQualiffiedUrl}");
+            _logger.Error($"fullyQualiffiedUrl in GetFullyQualifiedUrl method : {fullyQualiffiedUrl}");
             return fullyQualiffiedUrl.ToString();
         }
     }
