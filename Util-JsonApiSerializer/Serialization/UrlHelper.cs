@@ -113,6 +113,8 @@ namespace UtilJsonApiSerializer.Serialization
         public string GetFullyQualifiedUrl(string urlTemplate)
         {
             _logger.Error($"UrlTemplate in GetFullyQualifiedUrl method : {urlTemplate}");
+            _logger.Error($"URL in GetFullyQualifiedUrl method : {Url}");
+            _logger.Error($"RoutePrefix in GetFullyQualifiedUrl method : {RoutePrefix}");
             if (String.IsNullOrEmpty(Url))
             {
                 if (urlTemplate.StartsWith("//"))
@@ -125,11 +127,18 @@ namespace UtilJsonApiSerializer.Serialization
 
             //try to create an absolute URL from the urlTemplate
             if (Uri.TryCreate(urlTemplate, UriKind.Absolute, out fullyQualiffiedUrl))
+            {
+                _logger.Error($"First Try Create method called  : {fullyQualiffiedUrl}");
                 return fullyQualiffiedUrl.ToString();
+            }
 
             //try to create an absolute url from the routeprefix + urltemplate
             if (Uri.TryCreate(RoutePrefix + urlTemplate, UriKind.Absolute, out fullyQualiffiedUrl))
+            {
+                _logger.Error($"Second Try Create method called  : {fullyQualiffiedUrl}");
                 return fullyQualiffiedUrl.ToString();
+            }
+                
 
             if (!Uri.TryCreate(new Uri(Url), new Uri(RoutePrefix + urlTemplate, UriKind.Relative), out fullyQualiffiedUrl))
                 throw new ArgumentException(string.Format("Unable to create fully qualified url for urltemplate = '{0}'", urlTemplate));

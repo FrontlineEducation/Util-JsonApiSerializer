@@ -16,6 +16,8 @@ using UtilJsonApiSerializer.Serialization.Documents;
 using UtilJsonApiSerializer.Serialization.Representations;
 using UtilJsonApiSerializer.Serialization.Representations.Relationships;
 using UtilJsonApiSerializer.Serialization.Representations.Resources;
+using Common.Logging;
+using Newtonsoft.Json;
 
 namespace UtilJsonApiSerializer.Serialization
 {
@@ -33,7 +35,7 @@ namespace UtilJsonApiSerializer.Serialization
         private string _parentId = string.Empty;
 
 
-       
+        private readonly ILog _logger = LogManager.GetLogger<TransformationHelper>();
 
 #if NETCOREAPP
 
@@ -65,6 +67,8 @@ namespace UtilJsonApiSerializer.Serialization
                     }}
                 }
             };
+
+            _logger.Error($"Logged error in transformation helper : {JsonConvert.SerializeObject(compoundDocument)}");
 
             return compoundDocument;
         }
@@ -206,7 +210,7 @@ namespace UtilJsonApiSerializer.Serialization
                 RoutePrefix = context.RoutePrefix
             };
 
-
+            _logger.Error($"CreateResourceRepresentation method Route Prefix : {context.RoutePrefix}");
 #else
             var urlBuilder = new UrlBuilder
             {
@@ -223,6 +227,7 @@ namespace UtilJsonApiSerializer.Serialization
             if (resourceMapping.UrlTemplate != null)
             {
                 result.Links = CreateLinks(resourceMapping, urlBuilder, result, _parentId);
+                _logger.Error($"Links in CreateResourceRepresentation method : {JsonConvert.SerializeObject(result.Links)}");
             }
 
             if (resourceMapping.Relationships.Any())
@@ -253,7 +258,9 @@ namespace UtilJsonApiSerializer.Serialization
                 }
                 url = url.Replace("{" + token + "}", tokenValue);
             }
-            return new Dictionary<string, ILink>() { { SelfLinkKey, new SimpleLink { Href = urlBuilder.GetFullyQualifiedUrl(url) } } };
+            var res = new Dictionary<string, ILink>() { { SelfLinkKey, new SimpleLink { Href = urlBuilder.GetFullyQualifiedUrl(url) } } };
+            
+            return res;
         }
 
         private ILink GetUrlFromTemplate(string urlTemplate, string routePrefix, string parentId, string relatedId = null, string parenttype = null, string relationshipName = null)
