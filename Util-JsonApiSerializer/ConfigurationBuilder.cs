@@ -11,7 +11,8 @@ namespace UtilJsonApiSerializer
         public readonly Dictionary<Type, IResourceConfigurationBuilder> ResourceConfigurationsByType = new Dictionary<Type, IResourceConfigurationBuilder>();
         public ISerializerPipelineModule PipelineModule { get; private set; }
         private readonly Stack<IConvention> conventions = new Stack<IConvention>();
-        
+        public string RoutePrefix { get; private set; }
+
         public ConfigurationBuilder()
         {
             BuildConventions();
@@ -36,6 +37,13 @@ namespace UtilJsonApiSerializer
             conventions.Push(convention);
             return this;
         }
+
+        public ConfigurationBuilder WithRoutePrefix(string routePrefix)
+        {
+            RoutePrefix = routePrefix;
+            return this;
+        }
+
 
         public T GetConvention<T>() where T : class, IConvention
         {
@@ -63,7 +71,10 @@ namespace UtilJsonApiSerializer
 
         public Configuration Build()
         {
-            var configuration = new Configuration();
+            var configuration = new Configuration()
+            {
+                RoutePrefix = RoutePrefix
+            };
             var propertyScanningConvention = GetConvention<IPropertyScanningConvention>();
 
             // Each link needs to be wired to full metadata once all resources are registered
