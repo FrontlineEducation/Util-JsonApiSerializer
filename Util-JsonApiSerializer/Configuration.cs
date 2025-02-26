@@ -21,7 +21,7 @@ namespace UtilJsonApiSerializer
         private readonly Dictionary<string, IResourceMapping> resourcesMappingsByResourceType = new Dictionary<string, IResourceMapping>();
         private readonly Dictionary<Type, IResourceMapping> resourcesMappingsByType = new Dictionary<Type, IResourceMapping>();
         private readonly Dictionary<Type, IPreSerializerPipelineModule> _preSerializerPipelineModules = new Dictionary<Type, IPreSerializerPipelineModule>();
-
+        public string RoutePrefix { get; set; }
         public void AddMapping(IResourceMapping resourceMapping)
         {
             resourcesMappingsByResourceType[resourceMapping.ResourceType] = resourceMapping;

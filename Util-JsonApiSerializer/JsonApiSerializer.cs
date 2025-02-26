@@ -39,7 +39,7 @@ namespace UtilJsonApiSerializer
 #else
             var sut = new JsonApiTransformer() { TransformationHelper = new TransformationHelper() };
 #endif
-            CompoundDocument result = sut.Transform(obj, new Context() { Configuration = config, RoutePrefix = _routePrefix });
+            CompoundDocument result = sut.Transform(obj, new Context() { Configuration = config, RoutePrefix = config.RoutePrefix ?? _routePrefix });
 
             return result;
         }
