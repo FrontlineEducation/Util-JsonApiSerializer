@@ -58,7 +58,7 @@ steps:
     when: {steps: [{name: BuildingDockerImage, on: [success]}]}
     title: Running Sonar Analysis
     stage: Scan
-    image: sonarsource/sonar-scanner-cli:4.6
+    image: sonarsource/sonar-scanner-cli:${{SONAR_SCANNER_CLI_IMAGE_TAG}}
     commands:
         - "sonar-scanner -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=cf_${{CF_REPO_NAME}} -Dsonar.projectName=cf_${{CF_REPO_NAME}} -Dsonar.sources=./ -Dsonar.projectBaseDir=/codefresh/volume/${{CF_REPO_NAME}}/ -Dsonar.projectVersion=${TAG} -Dsonar.branch.name=${{CF_BRANCH}}"
  
