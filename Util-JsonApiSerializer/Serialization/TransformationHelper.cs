@@ -215,7 +215,7 @@ namespace UtilJsonApiSerializer.Serialization
 #endif
             var result = new SingleResource();
 
-            result.Id = resourceMapping.IdGetter(objectGraph).ToString();
+            result.Id = resourceMapping.IdGetter(objectGraph)?.ToString();
             result.Type = resourceMapping.ResourceType;
 
             result.Attributes = resourceMapping.PropertyGetters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value(objectGraph));
@@ -366,7 +366,7 @@ namespace UtilJsonApiSerializer.Serialization
                             .Cast<object>()
                             .Select(o => new SingleResourceIdentifier
                             {
-                                Id = idGetter(o).ToString(),
+                                Id = idGetter(o)?.ToString(),
                                 Type = context.Configuration.GetMapping(o.GetType()).ResourceType // This allows polymorphic (subtyped) resources to be fully represented
                             });
                         rel.Data = new MultipleResourceIdentifiers(identifiers);
