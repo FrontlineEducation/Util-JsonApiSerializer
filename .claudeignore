@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+packages/*/node_modules/
+vendor/
+.nuget/
+
+# Build outputs
+dist/
+build/
+out/
+bin/
+obj/
+*.min.js
+*.min.css
+
+# Generated files
+*.generated.cs
+*.Designer.cs
+*.g.cs
+migrations/Auto*
+
+# Logs and temporary files
+*.log
+*.tmp
+logs/
+tmp/
+temp/
+
+# Large data files
+*.sql.bak
+*.bak
+*.zip
+*.tar.gz
+data/seeds/
+
+# IDE and OS files
+.vs/
+.idea/
+.vscode/settings.json
+.DS_Store
+Thumbs.db
+*.suo
+*.user
+
+# Test results
+TestResults/
+coverage/
